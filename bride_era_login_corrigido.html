@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bride Era — Seu universo de noiva</title>
+<style>
+:root{
+ --bg:#fffaf9;--paper:#fffdfc;--rose:#f3e2e4;--rose2:#e8cbd0;--pink:#bd8792;
+ --gold:#b99a70;--ink:#55464a;--muted:#927f83;--line:#f0e4e3;--shadow:0 12px 35px rgba(113,75,82,.08);
+ --serif:Georgia,'Times New Roman',serif;--sans:Arial,Helvetica,sans-serif;
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{background:#fffdfc;border-right:1px solid var(--line);padding:28px 18px;position:sticky;top:0;height:100vh}
+.brand{text-align:center;padding:8px 4px 28px;border-bottom:1px solid var(--line)}
+.brand .name{font:italic 35px var(--serif);letter-spacing:1px;color:#a87580}
+.brand small{display:block;margin-top:7px;font-size:9px;letter-spacing:3px;color:var(--gold)}
+.profile{display:flex;align-items:center;gap:11px;padding:22px 8px}
+.avatar{width:39px;height:39px;border-radius:50%;background:linear-gradient(135deg,#f6e7e8,#dcbfc4);display:grid;place-items:center;color:#9b6c76;font:italic 18px var(--serif)}
+.profile strong{display:block;font:16px var(--serif)}.profile span{font-size:11px;color:var(--muted)}
+.nav-label{font-size:9px;letter-spacing:2px;color:#b49da1;padding:14px 10px 8px}
+.nav button{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;color:#78666b;padding:12px;border-radius:12px;text-align:left;margin:2px 0;font-size:13px}
+.nav button:hover,.nav button.active{background:#f8edef;color:#a56f7a}
+.nav .ico{width:19px;text-align:center;font-size:16px}
+.sidebar-note{position:absolute;bottom:20px;left:18px;right:18px;background:#fbf3f2;border:1px solid var(--line);border-radius:15px;padding:14px;font:italic 14px var(--serif);color:#98747b;text-align:center}
+main{min-width:0;padding:28px clamp(18px,4vw,58px) 60px;max-width:1500px;width:100%;margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}
+.eyebrow{font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+h1{font:clamp(30px,4vw,43px) var(--serif);font-weight:400;margin:8px 0;color:#59464c}
+.sub{color:var(--muted);font-size:13px;line-height:1.6}
+.actions{display:flex;gap:8px;align-items:center}.pill{border:1px solid var(--line);background:white;padding:10px 14px;border-radius:30px;color:#866d73;font-size:12px}
+.hero{border-radius:22px;overflow:hidden;position:relative;min-height:230px;background:linear-gradient(90deg,rgba(255,249,248,.97),rgba(255,249,248,.82),rgba(255,249,248,.2)),url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85') center/cover;box-shadow:var(--shadow);padding:34px;display:flex;align-items:center}
+.hero-content{max-width:460px}.hero h2{font:italic 34px var(--serif);font-weight:400;margin:8px 0}.hero p{font-size:12px;color:#806e72;line-height:1.7;max-width:350px}
+.btn{border:0;border-radius:30px;background:#ad7883;color:white;padding:11px 17px;font-size:12px;box-shadow:0 5px 15px #ad788333}.btn.secondary{background:#fff;border:1px solid var(--line);color:#916e76;box-shadow:none}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:30px 0 14px}
+.section-head h2{font:25px var(--serif);font-weight:400;margin:0}.section-head p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:0 5px 18px rgba(113,75,82,.035)}
+.stat{display:flex;justify-content:space-between;align-items:start}.stat .symbol{width:36px;height:36px;border-radius:12px;background:#fbf0f0;display:grid;place-items:center;color:#a87680}
+.stat strong{font:27px var(--serif);font-weight:400;display:block;margin-top:12px}.stat small{font-size:11px;color:var(--muted)}
+.progress{height:6px;background:#f3e8e8;border-radius:9px;margin-top:12px;overflow:hidden}.progress span{display:block;height:100%;background:#c997a0;border-radius:9px}
+.two{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-top:14px}
+.task{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #f4ebea;font-size:12px}.task:last-child{border:0}
+.task input{accent-color:#b57f89;width:16px;height:16px}.task.done span{text-decoration:line-through;color:#b6a7aa}
+.tag{display:inline-block;background:#f8eded;color:#9c737b;border-radius:20px;padding:5px 9px;font-size:10px}
+.page{display:none}.page.active{display:block}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}
+input[type=text],textarea,select{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px;color:var(--ink);outline:none}
+textarea{min-height:90px;resize:vertical}
+.formrow{display:flex;gap:9px}.formrow>*{flex:1}
+.post{background:white;border:1px solid var(--line);border-radius:17px;padding:17px;margin:12px 0}
+.posthead{display:flex;align-items:center;gap:10px}.posthead b{font:16px var(--serif)}.posthead small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.post p{font-size:13px;line-height:1.7;color:#76666a}
+.post-actions{display:flex;gap:14px;border-top:1px solid var(--line);padding-top:12px}
+.post-actions button{border:0;background:none;color:#9a747c;font-size:11px}
+.theme-options{display:flex;gap:10px;flex-wrap:wrap}.swatch{width:38px;height:38px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 1px #e6d8d9}
+.footer{text-align:center;color:#b39da1;font:italic 13px var(--serif);padding:34px 0}
+.mobilebar{display:none}
+@media(max-width:850px){.shell{grid-template-columns:1fr}.sidebar{display:none}main{padding:20px 16px 85px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.mobilebar{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fffdfc;border-top:1px solid var(--line);justify-content:space-around;padding:9px 4px;z-index:5}.mobilebar button{border:0;background:none;color:#8c747a;font-size:10px;display:grid;gap:3px;justify-items:center}.hero{padding:25px;min-height:240px;background-position:60% center}.hero h2{font-size:29px}}
+@media(max-width:430px){.grid{grid-template-columns:1fr 1fr}.card{padding:14px}.stat strong{font-size:23px}.topbar{align-items:flex-start}.actions .pill{display:none}}
+</style>
+</head>
+<body>
+
+<div id="authGate" style="position:fixed;inset:0;z-index:20;background:#fffaf9;display:grid;place-items:center;padding:20px">
+  <div style="width:min(100%,430px);background:#fffdfc;border:1px solid #f0e4e3;border-radius:22px;padding:28px;box-shadow:0 12px 35px rgba(113,75,82,.08)">
+    <div style="text-align:center;font:italic 36px Georgia;color:#a87580">Bride Era</div>
+    <p style="text-align:center;color:#927f83;font-size:11px;letter-spacing:2px">YOUR FAIRYTALE BEGINS HERE</p>
+    <h1 style="font:28px Georgia;font-weight:400;text-align:center">Seu espaço começa aqui</h1>
+    <p style="font-size:13px;line-height:1.6;color:#927f83;text-align:center">Crie sua conta ou entre para acessar seu planejamento privado.</p>
+    <label style="display:block;font-size:12px;margin:14px 0 6px">E-mail</label>
+    <input id="authEmail" type="email" autocomplete="email" placeholder="seuemail@exemplo.com" style="width:100%;padding:12px;border:1px solid #f0e4e3;border-radius:12px">
+    <label style="display:block;font-size:12px;margin:14px 0 6px">Senha</label>
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="Mínimo de 6 caracteres" style="width:100%;padding:12px;border:1px solid #f0e4e3;border-radius:12px">
+    <div style="display:flex;gap:8px;margin-top:18px">
+      <button id="signInBtn" class="btn" style="flex:1">Entrar</button>
+      <button id="signUpBtn" class="btn secondary" style="flex:1">Criar conta</button>
+    </div>
+    <button id="forgotPasswordBtn" type="button" style="display:block;margin:13px auto 0;border:0;background:transparent;color:#a87580;text-decoration:underline;font-size:12px;padding:6px">Esqueci minha senha</button>
+    <p id="authMessage" role="status" style="font-size:12px;line-height:1.5;color:#927f83"></p>
+    <p style="font-size:10px;line-height:1.5;color:#a38f93">Use uma senha exclusiva. Nunca compartilhe sua senha com ninguém. Seus dados de planejamento ficam vinculados à sua conta.</p>
+  </div>
+</div>
+
+<div class="shell" id="appShell" style="visibility:hidden">
+<aside class="sidebar">
+ <div class="brand"><div class="name">Bride Era</div><small>YOUR FAIRYTALE BEGINS HERE</small></div>
+ <div class="profile"><div class="avatar">B</div><div><strong>Bem-vinda, noiva</strong><span>Seu espaço especial</span></div></div>
+ <div class="nav-label">MEU UNIVERSO</div>
+ <nav class="nav">
+  <button class="active" data-page="home"><span class="ico">⌂</span> Visão geral</button>
+  <button data-page="checklist"><span class="ico">♡</span> Meu checklist</button>
+  <button data-page="budget"><span class="ico">♧</span> Financeiro</button>
+  <button data-page="guests"><span class="ico">♙</span> Convidados</button>
+  <button data-page="vendors"><span class="ico">✧</span> Fornecedores</button>
+  <button data-page="inspiration"><span class="ico">❀</span> Inspirações</button>
+  <div class="nav-label">NOSSO CANTINHO</div>
+  <button data-page="community"><span class="ico">♡</span> Comunidade</button>
+  <button data-page="groups"><span class="ico">♧</span> Grupos temáticos</button>
+  <div class="nav-label">PERSONALIZE</div>
+  <button data-page="settings"><span class="ico">✿</span> Meu tema</button>
+ </nav>
+ <div class="sidebar-note">“Que a organização também faça parte da magia.”</div>
+</aside>
+<main>
+ <div class="topbar"><div><div class="eyebrow">Um capítulo só seu</div><div style="font:italic 17px Georgia;color:#a47780">Bride Era</div></div><div class="actions"><button class="pill" onclick="showPage('settings')">✧ Personalizar</button><span id="accountLabel" class="pill">Minha conta</span><button class="pill" id="signOutBtn">Sair</button></div></div>
+
+<section id="home" class="page active">
+ <div class="hero"><div class="hero-content"><div class="eyebrow">Bem-vinda à sua era</div><h2>Seu conto de amor<br>em cada detalhe.</h2><p>Um espaço feito para organizar os preparativos, guardar inspirações e aproveitar cada momento até o grande dia.</p><button class="btn" onclick="showPage('checklist')">Começar meu planejamento　→</button></div></div>
+ <div class="section-head"><div><h2>Seu casamento em números</h2><p>Um pouquinho de cada etapa do seu caminho.</p></div><span class="tag">Meu espaço privado</span></div>
+ <div class="grid">
+  <div class="card stat"><div><small>Checklist concluído</small><strong id="doneCount">2 de 8</strong><small>tarefas realizadas</small></div><div class="symbol">♡</div><div class="progress" style="grid-column:1/-1;width:100%"><span id="homeProgress" style="width:25%"></span></div></div>
+  <div class="card stat"><div><small>Convidados</small><strong id="guestCount">0</strong><small>nomes adicionados</small></div><div class="symbol">♙</div></div>
+  <div class="card stat"><div><small>Orçamento planejado</small><strong>R$ 0</strong><small>adicione seus valores</small></div><div class="symbol">♧</div></div>
+ </div>
+ <div class="two">
+  <div class="card"><div class="section-head" style="margin:0 0 8px"><div><h2>Próximos passos</h2><p>Pequenas etapas, grandes sonhos.</p></div><button class="btn secondary" onclick="showPage('checklist')">Ver tudo</button></div><div id="homeTasks"></div></div>
+  <div class="card"><div class="eyebrow">Um lembrete carinhoso</div><h2 style="font:italic 25px Georgia;font-weight:400">Não se esqueça de viver o caminho.</h2><p class="sub">O casamento é um dia especial, mas a preparação também pode guardar memórias bonitas. Faça uma pausa, respire e celebre cada conquista.</p><span class="tag">Com carinho, Bride Era</span></div>
+ </div>
+</section>
+
+<section id="checklist" class="page">
+ <div class="eyebrow">Meu planejamento</div><h1>Checklist da noiva</h1><p class="sub">Organize cada etapa no seu ritmo. Marque as tarefas conforme forem concluídas.</p>
+ <div class="card"><div class="section-head" style="margin-top:0"><div><h2>Preparativos essenciais</h2><p id="taskSummary">2 de 8 concluídas</p></div><span class="tag" id="taskPercent">25%</span></div><div class="progress"><span id="taskProgress" style="width:25%"></span></div><div id="taskList"></div></div>
+</section>
+
+<section id="budget" class="page">
+ <div class="eyebrow">Organização financeira</div><h1>Meu orçamento</h1><p class="sub">Registre estimativas e pagamentos. Estes dados são apenas demonstrativos neste protótipo.</p>
+ <div class="grid"><div class="card"><small class="sub">Orçamento total</small><strong style="font:28px Georgia;display:block;margin-top:9px">R$ 0,00</strong></div><div class="card"><small class="sub">Total pago</small><strong style="font:28px Georgia;display:block;margin-top:9px">R$ 0,00</strong></div><div class="card"><small class="sub">Em aberto</small><strong style="font:28px Georgia;display:block;margin-top:9px">R$ 0,00</strong></div></div>
+ <div class="card" style="margin-top:14px"><h2 style="font:24px Georgia;font-weight:400">Adicionar despesa</h2><div class="formrow"><input id="expenseName" type="text" placeholder="Ex.: Fotografia"><input id="expenseValue" type="text" placeholder="Valor (R$)"></div><button class="btn" style="margin-top:10px" onclick="addExpense()">Adicionar</button><div id="expenseList" class="sub" style="margin-top:14px">Nenhuma despesa cadastrada.</div></div>
+</section>
+
+<section id="guests" class="page">
+ <div class="eyebrow">Lista especial</div><h1>Meus convidados</h1><p class="sub">Uma lista inicial para ajudar a organizar quem fará parte desse dia.</p>
+ <div class="card"><div class="formrow"><input id="guestName" type="text" placeholder="Nome completo do convidado"><button class="btn" onclick="addGuest()">Adicionar nome</button></div><div id="guestList" style="margin-top:14px"></div></div>
+</section>
+
+<section id="vendors" class="page">
+ <div class="eyebrow">Quem faz parte do sonho</div><h1>Meus fornecedores</h1><p class="sub">Guarde contatos e observações importantes em um só lugar.</p>
+ <div class="card"><div class="formrow"><input id="vendorName" type="text" placeholder="Nome do fornecedor"><input id="vendorType" type="text" placeholder="Categoria"></div><button class="btn" style="margin-top:10px" onclick="addVendor()">Adicionar fornecedor</button><div id="vendorList" style="margin-top:14px" class="sub">Nenhum fornecedor cadastrado.</div></div>
+</section>
+
+<section id="inspiration" class="page">
+ <div class="eyebrow">Seu mural de sonhos</div><h1>Inspirações</h1><p class="sub">Um lugar para guardar ideias que representam o casamento que você imagina.</p>
+ <div class="grid">
+  <div class="card"><div style="font:48px Georgia;color:#c59ca4">❀</div><h2 style="font:21px Georgia">Decoração</h2><p class="sub">Flores, mesas, cerimônia e recepção.</p></div>
+  <div class="card"><div style="font:48px Georgia;color:#c59ca4">♡</div><h2 style="font:21px Georgia">Vestido</h2><p class="sub">Modelos, acessórios e beleza.</p></div>
+  <div class="card"><div style="font:48px Georgia;color:#c59ca4">✧</div><h2 style="font:21px Georgia">Papelaria</h2><p class="sub">Convites, menus e identidade visual.</p></div>
+ </div>
+ <div class="card" style="margin-top:14px"><textarea id="inspoText" placeholder="Escreva uma ideia, referência ou detalhe que não quer esquecer..."></textarea><button class="btn" style="margin-top:10px" onclick="saveInspo()">Guardar anotação</button><div id="inspoSaved" class="sub" style="margin-top:10px"></div></div>
+</section>
+
+<section id="community" class="page">
+ <div class="eyebrow">Juntas nessa fase</div><h1>Comunidade Bride Era</h1><p class="sub">Compartilhe ideias, faça perguntas e celebre pequenas conquistas com outras noivas.</p>
+ <div class="card"><textarea id="postText" placeholder="O que você gostaria de compartilhar com a comunidade? Evite publicar dados pessoais ou informações privadas."></textarea><div class="formrow" style="margin-top:9px"><select id="postTopic"><option>Minha jornada</option><option>Vestido e beleza</option><option>Decoração</option><option>Organização</option><option>Dúvidas</option></select><button class="btn" onclick="addPost()">Publicar no protótipo</button></div><small class="sub">Demonstração local: as publicações não são enviadas para outras pessoas.</small></div>
+ <div id="feed">
+  <article class="post"><div class="posthead"><div class="avatar">M</div><div><b>Marina</b><small>Inspirações · exemplo</small></div></div><p>Estou começando a montar minha paleta de cores e me apaixonei por tons de rosa antigo, pérola e champagne. Qual combinação vocês escolheriam?</p><div class="post-actions"><button onclick="like(this)">♡ Curtir</button><button onclick="alert('Comentários serão habilitados na versão conectada.')">♡ Comentar</button><button onclick="alert('Obrigado por ajudar a manter a comunidade segura. Na versão real, a denúncia será enviada à moderação.')">⚑ Denunciar</button></div></article>
+ </div>
+</section>
+
+<section id="groups" class="page">
+ <div class="eyebrow">Encontre seu assunto</div><h1>Grupos temáticos</h1><p class="sub">Converse sobre os temas que fazem parte dos preparativos.</p>
+ <div class="grid" id="groupGrid"></div>
+</section>
+
+<section id="settings" class="page">
+ <div class="eyebrow">Seu cantinho, suas escolhas</div><h1>Personalize seu tema</h1><p class="sub">Experimente as cores da sua Bride Era. A alteração é apenas visual neste protótipo.</p>
+ <div class="card"><h2 style="font:23px Georgia;font-weight:400">Escolha uma paleta</h2><div class="theme-options">
+  <button class="swatch" title="Princesa rosé" style="background:#f3e2e4" onclick="setTheme('rose')"></button>
+  <button class="swatch" title="Jardim" style="background:#e3e9df" onclick="setTheme('garden')"></button>
+  <button class="swatch" title="Champagne" style="background:#eee2ce" onclick="setTheme('champagne')"></button>
+  <button class="swatch" title="Lavanda" style="background:#e8e1ef" onclick="setTheme('lavender')"></button>
+  <button class="swatch" title="Pérola" style="background:#f5f1e9" onclick="setTheme('pearl')"></button>
+ </div><p class="sub">Toque em uma cor para visualizar a mudança.</p><label class="sub" for="brideName">Nome que aparece no seu espaço</label><input id="brideName" type="text" placeholder="Ex.: Meu casamento" style="margin:7px 0 12px"><button class="btn" onclick="saveBrideName()">Salvar nome no protótipo</button><p class="sub" id="nameSaved"></p></div>
+ <div class="card" style="margin-top:14px"><h2 style="font:23px Georgia;font-weight:400">Privacidade e segurança</h2><p class="sub">Na plataforma publicada, seu planner será privado por padrão. Você controlará o que compartilha na comunidade. Não publique endereço residencial, documentos, dados bancários ou contratos completos.</p></div>
+</section>
+<div class="footer">Feito para celebrar cada capítulo da sua história · Bride Era</div>
+</main>
+</div>
+<div class="mobilebar">
+ <button onclick="showPage('home')">⌂<span>Início</span></button>
+ <button onclick="showPage('checklist')">♡<span>Checklist</span></button>
+ <button onclick="showPage('community')">♧<span>Comunidade</span></button>
+ <button onclick="showPage('settings')">✧<span>Meu tema</span></button>
+</div>
+<script>
+const tasks=[
+ 'Definir a data e o estilo do casamento','Estabelecer o orçamento inicial','Pesquisar e reservar o local','Escolher os principais fornecedores',
+ 'Montar a lista inicial de convidados','Definir identidade visual e paleta','Escolher vestido e acessórios','Organizar cerimônia e recepção'
+];
+let checked=new Set([0,1]), guests=[], vendors=[], expenses=[];
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function renderTasks(){
+ const html=tasks.map((t,i)=>`<label class="task ${checked.has(i)?'done':''}"><input type="checkbox" ${checked.has(i)?'checked':''} onchange="toggleTask(${i})"><span>${t}</span></label>`).join('');
+ document.getElementById('taskList').innerHTML=html;document.getElementById('homeTasks').innerHTML=tasks.slice(0,4).map((t,i)=>`<label class="task ${checked.has(i)?'done':''}"><input type="checkbox" ${checked.has(i)?'checked':''} onchange="toggleTask(${i})"><span>${t}</span></label>`).join('');
+ let n=checked.size,p=Math.round(n/tasks.length*100);document.getElementById('doneCount').textContent=`${n} de ${tasks.length}`;document.getElementById('homeProgress').style.width=p+'%';document.getElementById('taskProgress').style.width=p+'%';document.getElementById('taskSummary').textContent=`${n} de ${tasks.length} concluídas`;document.getElementById('taskPercent').textContent=p+'%';
+}
+function toggleTask(i){checked.has(i)?checked.delete(i):checked.add(i);renderTasks();window.brideEraSave?.()}
+function addGuest(){let v=document.getElementById('guestName').value.trim();if(!v)return;guests.push(v);document.getElementById('guestName').value='';renderGuests();window.brideEraSave?.()}
+function renderGuests(){document.getElementById('guestCount').textContent=guests.length;document.getElementById('guestList').innerHTML=guests.map((g,i)=>`<div class="task"><span style="flex:1">${g}</span><button class="pill" onclick="guests.splice(${i},1);renderGuests()">Remover</button></div>`).join('')||'<p class="sub">Sua lista ainda está vazia.</p>'}
+function addVendor(){let n=document.getElementById('vendorName').value.trim(),t=document.getElementById('vendorType').value.trim();if(!n)return;vendors.push({n,t});document.getElementById('vendorName').value='';document.getElementById('vendorType').value='';document.getElementById('vendorList').innerHTML=vendors.map(v=>`<div class="task"><b>${v.n}</b><span class="tag">${v.t||'Fornecedor'}</span></div>`).join('');window.brideEraSave?.()}
+function addExpense(){let n=document.getElementById('expenseName').value.trim(),v=document.getElementById('expenseValue').value.trim();if(!n||!v)return;expenses.push({n,v});document.getElementById('expenseName').value='';document.getElementById('expenseValue').value='';document.getElementById('expenseList').innerHTML=expenses.map(e=>`<div class="task"><span style="flex:1">${e.n}</span><b>${e.v}</b></div>`).join('');window.brideEraSave?.()}
+function saveInspo(){let v=document.getElementById('inspoText').value.trim();if(v){document.getElementById('inspoSaved').textContent='Anotação adicionada: '+v;window.brideEraSave?.()}}
+function addPost(){let v=document.getElementById('postText').value.trim();if(!v)return;let topic=document.getElementById('postTopic').value;let el=document.createElement('article');el.className='post';el.innerHTML=`<div class="posthead"><div class="avatar">V</div><div><b>Você · demonstração</b><small>${topic} · agora</small></div></div><p></p><div class="post-actions"><button onclick="like(this)">♡ Curtir</button><button onclick="alert('Comentários serão habilitados na versão conectada.')">♡ Comentar</button><button onclick="alert('Na versão real, a denúncia será enviada à moderação.')">⚑ Denunciar</button></div>`;el.querySelector('p').textContent=v;document.getElementById('feed').prepend(el);document.getElementById('postText').value='';window.brideEraSave?.()}
+function like(b){b.textContent=b.textContent.includes('♡')?'♥ Curtido':'♡ Curtir'}
+function setTheme(t){window.currentBrideTheme=t;let palettes={rose:['#fffaf9','#f3e2e4','#e8cbd0','#bd8792'],garden:['#fbfcf8','#e3e9df','#cbd8c5','#81977d'],champagne:['#fcfaf5','#eee2ce','#d8c4a5','#a98b62'],lavender:['#fbf9fd','#e8e1ef','#d3c5e3','#927ca9'],pearl:['#fffdf9','#f5f1e9','#e7dfd0','#a89579']};let p=palettes[t];document.documentElement.style.setProperty('--bg',p[0]);document.documentElement.style.setProperty('--rose',p[1]);document.documentElement.style.setProperty('--rose2',p[2]);document.documentElement.style.setProperty('--pink',p[3]);window.brideEraSave?.()}
+function saveBrideName(){let v=document.getElementById('brideName').value.trim();if(v){document.getElementById('nameSaved').textContent='Nome de exibição atualizado: '+v;window.currentBrideName=v;window.brideEraSave?.()}}
+document.getElementById('groupGrid').innerHTML=[['Vestidos & beleza','♡'],['Decoração & flores','❀'],['Fornecedores','✧'],['Organização financeira','♧'],['Cerimônia & recepção','⌂'],['Dúvidas e conselhos','☼']].map(g=>`<div class="card"><div style="font:35px Georgia;color:#bb8993">${g[1]}</div><h2 style="font:20px Georgia;font-weight:400">${g[0]}</h2><p class="sub">Espaço temático para trocar experiências e ideias.</p><button class="btn secondary" onclick="alert('Os grupos serão conectados na próxima etapa.')">Conhecer grupo</button></div>`).join('');
+
+renderTasks();renderGuests();
+window.brideEraGetState=()=>({
+  checked:[...checked], guests, vendors, expenses,
+  inspiration:document.getElementById('inspoText').value,
+  brideName:window.currentBrideName||'',
+  theme:window.currentBrideTheme||'rose'
+});
+window.brideEraLoadState=(data)=>{
+  checked=new Set(Array.isArray(data.checked)?data.checked:[]);
+  guests=Array.isArray(data.guests)?data.guests:[];
+  vendors=Array.isArray(data.vendors)?data.vendors:[];
+  expenses=Array.isArray(data.expenses)?data.expenses:[];
+  renderTasks();renderGuests();
+  document.getElementById('vendorList').innerHTML=vendors.map(v=>`<div class="task"><b>${v.n}</b><span class="tag">${v.t||'Fornecedor'}</span></div>`).join('')||'Nenhum fornecedor cadastrado.';
+  document.getElementById('expenseList').innerHTML=expenses.map(e=>`<div class="task"><span style="flex:1">${e.n}</span><b>${e.v}</b></div>`).join('')||'Nenhuma despesa cadastrada.';
+  document.getElementById('inspoText').value=data.inspiration||'';
+  if(data.brideName){window.currentBrideName=data.brideName;document.getElementById('brideName').value=data.brideName;document.getElementById('nameSaved').textContent='Nome de exibição: '+data.brideName}
+  if(data.theme)setTheme(data.theme);
+};
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAROcMydnRUMitUnsrpgVUObpXQ4MUUhWQ",
+  authDomain: "brideera.firebaseapp.com",
+  projectId: "brideera",
+  storageBucket: "brideera.firebasestorage.app",
+  messagingSenderId: "473251536813",
+  appId: "1:473251536813:web:807e8697de7518c1724b24"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const gate = document.getElementById('authGate');
+const shell = document.getElementById('appShell');
+const message = document.getElementById('authMessage');
+let saveTimer;
+
+function credentials(){
+  return {
+    email: document.getElementById('authEmail').value.trim(),
+    password: document.getElementById('authPassword').value
+  };
+}
+// Evita que a tela fique presa em "Entrando..." se a conexão não responder.
+const signInBtn = document.getElementById('signInBtn');
+const signUpBtn = document.getElementById('signUpBtn');
+
+function withTimeout(promise, ms=15000) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => {
+      const err = new Error('A conexão demorou mais que o esperado.');
+      err.code = 'app/timeout';
+      reject(err);
+    }, ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+function setAuthBusy(button, busy, label) {
+  button.disabled = busy;
+  button.style.opacity = busy ? '.65' : '1';
+  button.textContent = busy ? label : (button.id === 'signInBtn' ? 'Entrar' : 'Criar conta');
+}
+
+function validateCredentials(email, password, needsPassword=true) {
+  if (!email) { message.textContent='Digite seu e-mail.'; document.getElementById('authEmail').focus(); return false; }
+  if (needsPassword && !password) { message.textContent='Digite sua senha.'; document.getElementById('authPassword').focus(); return false; }
+  return true;
+}
+
+signInBtn.addEventListener('click', async ()=>{
+  const {email,password}=credentials();
+  if (!validateCredentials(email,password)) return;
+  setAuthBusy(signInBtn,true,'Conectando...');
+  message.textContent='Conectando à sua conta...';
+  try {
+    await withTimeout(signInWithEmailAndPassword(auth,email,password));
+  } catch(e) {
+    message.textContent = e.code === 'app/timeout'
+      ? 'A conexão com o Firebase está demorando. Confira sua internet e tente novamente. Se continuar, precisamos verificar o domínio autorizado do Firebase.'
+      : authError(e.code);
+  } finally {
+    setAuthBusy(signInBtn,false);
+  }
+});
+
+signUpBtn.addEventListener('click', async ()=>{
+  const {email,password}=credentials();
+  if (!validateCredentials(email,password)) return;
+  if(password.length<6){message.textContent='A senha precisa ter pelo menos 6 caracteres.';return;}
+  setAuthBusy(signUpBtn,true,'Criando...');
+  message.textContent='Criando sua conta...';
+  try {
+    await withTimeout(createUserWithEmailAndPassword(auth,email,password));
+  } catch(e) {
+    message.textContent = e.code === 'app/timeout'
+      ? 'A conexão com o Firebase está demorando. Confira sua internet e tente novamente.'
+      : authError(e.code);
+  } finally {
+    setAuthBusy(signUpBtn,false);
+  }
+});
+document.getElementById('forgotPasswordBtn').addEventListener('click', async ()=>{
+  const email=document.getElementById('authEmail').value.trim();
+  if(!email){
+    message.textContent='Digite seu e-mail no campo acima e depois toque em “Esqueci minha senha”.';
+    document.getElementById('authEmail').focus();
+    return;
+  }
+  try {
+    message.textContent='Enviando o link de redefinição...';
+    await sendPasswordResetEmail(auth,email);
+    message.textContent='Se esse e-mail estiver cadastrado, você receberá uma mensagem com as instruções para redefinir sua senha. Confira também o spam.';
+  } catch(e) {
+    message.textContent=authError(e.code);
+  }
+});
+document.getElementById('signOutBtn').addEventListener('click', ()=>signOut(auth));
+function authError(code){
+  const errors={
+    'auth/invalid-email':'Confira o endereço de e-mail.',
+    'auth/missing-password':'Digite sua senha.',
+    'auth/weak-password':'Escolha uma senha com pelo menos 6 caracteres.',
+    'auth/email-already-in-use':'Esse e-mail já possui uma conta. Tente entrar.',
+    'auth/invalid-credential':'E-mail ou senha incorretos.',
+    'auth/network-request-failed':'Falha de conexão. Confira sua internet.',
+    'auth/too-many-requests':'Muitas tentativas. Aguarde um pouco e tente novamente.',
+    'auth/user-disabled':'Esta conta está desativada.',
+    'auth/operation-not-allowed':'O acesso por e-mail e senha não está habilitado no Firebase.',
+    'auth/unauthorized-domain':'Este endereço ainda não está autorizado no Firebase Authentication.'
+  };
+  return errors[code]||'Não foi possível concluir. Confira os dados e tente novamente.';
+}
+function plannerRef(uid){ return doc(db,'users',uid,'planner','main'); }
+
+window.brideEraSave=()=>{
+  const user=auth.currentUser;
+  if(!user || !window.brideEraGetState) return;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async ()=>{
+    try {
+      await setDoc(plannerRef(user.uid), {
+        ...window.brideEraGetState(),
+        updatedAt:serverTimestamp()
+      }, {merge:true});
+    } catch(e) {
+      console.error('Falha ao salvar planejamento:',e);
+      message.textContent='Não foi possível salvar. Confira as regras do Firestore e tente novamente.';
+    }
+  },500);
+};
+
+onAuthStateChanged(auth, async user=>{
+  if(!user){
+    gate.style.display='grid'; shell.style.visibility='hidden';
+    document.getElementById('accountLabel').textContent='Minha conta';
+    return;
+  }
+  message.textContent='Carregando seu planejamento...';
+  try{
+    const snap=await getDoc(plannerRef(user.uid));
+    if(snap.exists()) window.brideEraLoadState(snap.data());
+    else await setDoc(plannerRef(user.uid),{createdAt:serverTimestamp(),checked:[0,1],guests:[],vendors:[],expenses:[],inspiration:'',theme:'rose'});
+    document.getElementById('accountLabel').textContent=user.email||'Minha conta';
+    gate.style.display='none'; shell.style.visibility='visible';
+    message.textContent='';
+  }catch(e){
+    console.error(e);
+    message.textContent='Conta autenticada, mas não foi possível carregar os dados. Precisamos revisar as regras do Firestore.';
+    gate.style.display='grid'; shell.style.visibility='hidden';
+  }
+});
+</script>
+
+</body>
+</html>
